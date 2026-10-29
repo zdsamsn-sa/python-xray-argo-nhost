@@ -1,0 +1,104 @@
+# Nhost Run service configuration for python-xray-argo
+# Deploy with: nhost run config-deploy --config nhost-run-service.toml --service-id <your-service-id>
+# Or create the service in the Nhost dashboard (app.nhost.io) and paste this config.
+
+name = "xray-argo"
+
+[image]
+# After building and pushing your image to Nhost registry, replace with:
+# image = "registry.<region>.nhost.run/<project-id>/xray-argo:latest"
+# For testing you can also use a public image if you push one.
+image = "python:3.11-slim-bookworm"   # placeholder - replace after building
+
+# Optional: override command if needed
+# command = ["python3", "app.py"]
+
+[[ports]]
+port = 3000
+type = "http"
+publish = true
+# The public URL will be available after deploy, e.g. https://xxxx.run.nhost.run
+
+[resources]
+replicas = 1
+
+[resources.compute]
+# Recommended minimum for xray + cloudflared
+cpu = 500          # millicores
+memory = 512       # MiB
+
+# Optional persistent storage (uncomment if you need sub.txt to survive restarts)
+# [[resources.storage]]
+# name = "cache"
+# path = "/tmp/.cache"
+# capacity = 1   # GiB
+
+# ==================== Environment Variables ====================
+# Set these in the Nhost dashboard or here (secrets supported in overlays)
+# At minimum you usually want to set UUID, NAME, and optionally ARGO_DOMAIN / ARGO_AUTH for fixed tunnel.
+
+[[environment]]
+name = "PORT"
+value = "3000"
+
+[[environment]]
+name = "FILE_PATH"
+value = "/tmp/.cache"
+
+[[environment]]
+name = "SHOW_LOG"
+value = "true"
+
+# Uncomment and fill the ones you need:
+
+# [[environment]]
+# name = "UUID"
+# value = "your-uuid-here"
+
+# [[environment]]
+# name = "NAME"
+# value = "Nhost"
+
+# [[environment]]
+# name = "CFIP"
+# value = "cf.877774.xyz"
+
+# [[environment]]
+# name = "CFPORT"
+# value = "443"
+
+# [[environment]]
+# name = "SUB_PATH"
+# value = "sub"
+
+# [[environment]]
+# name = "ARGO_DOMAIN"
+# value = ""
+
+# [[environment]]
+# name = "ARGO_AUTH"
+# value = ""
+
+# [[environment]]
+# name = "NEZHA_SERVER"
+# value = ""
+
+# [[environment]]
+# name = "NEZHA_KEY"
+# value = ""
+
+# [[environment]]
+# name = "CHAT_ID"
+# value = ""
+
+# [[environment]]
+# name = "BOT_TOKEN"
+# value = ""
+
+# [[environment]]
+# name = "PROJECT_URL"
+# value = ""   # your Nhost Run public URL for auto-keepalive
+
+# [[environment]]
+# name = "AUTO_ACCESS"
+# value = "false"
